@@ -1,8 +1,11 @@
 // ignore_for_file: unused_field, no_leading_underscores_for_local_identifiers
 
+import 'dart:developer';
+
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:student_details/db/models/data_model.dart';
+
 
 class StudentController extends GetxController {
   final Box<StudentModel> _box = Hive.box('student_db');
@@ -14,23 +17,20 @@ class StudentController extends GetxController {
   }
 
   _getStudent() {
-    Hive.openBox('student_db');
-    final Box<StudentModel> _box = Hive.box('student_db');
     studentList = _box.values.toList();
+    log(studentList.toString());
+    // SearchProfile().temp.value = RxList(studentList);
+   
     update();
   }
 
   addStudent(StudentModel student) {
-    final Box<StudentModel> _box = Hive.box('student_db');
     _box.add(student);
     _getStudent();
     update();
   }
 
   updateStudent(var key, StudentModel value) {
-    Hive.openBox('student_db');
-
-    final Box<StudentModel> _box = Hive.box('student_db');
     _box.put(key, value);
     _getStudent();
     update();

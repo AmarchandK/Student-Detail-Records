@@ -5,26 +5,19 @@ import 'package:get/get.dart';
 import '../../constants/Button/material_button.dart';
 import '../../constants/styles.dart';
 import '../../controllers/student_controller.dart';
-import '../../db/functions/db_functions.dart';
 import '../../db/models/data_model.dart';
 import '../home/home_screen.dart';
 import 'package:image_picker/image_picker.dart';
 
 // ignore: must_be_immutable
-class EditPage extends StatefulWidget {
+class EditPage extends StatelessWidget {
   StudentModel data;
-  late String _image = data.image;
+  late RxString image = data.image.obs;
   int? index;
   EditPage({Key? key, required this.data, required this.index})
       : super(key: key);
 
-  @override
-  State<EditPage> createState() => _EditPageState();
-}
-
-final StudentController _controller = Get.put(StudentController());
-
-class _EditPageState extends State<EditPage> {
+  final StudentController _controller = Get.put(StudentController());
   final formkey = GlobalKey<FormState>();
 
   final _name = TextEditingController();
@@ -38,10 +31,10 @@ class _EditPageState extends State<EditPage> {
 
   @override
   Widget build(BuildContext context) {
-    _name.text = widget.data.name.toString();
-    _age.text = widget.data.age.toString();
-    _domain.text = widget.data.domain.toString();
-    _phone.text = widget.data.phone.toString();
+    _name.text = data.name.toString();
+    _age.text = data.age.toString();
+    _domain.text = data.domain.toString();
+    _phone.text = data.phone.toString();
     return Container(
       decoration: baground,
       child: Scaffold(
@@ -56,23 +49,22 @@ class _EditPageState extends State<EditPage> {
                 padding: const EdgeInsets.all(8.0),
                 child: GestureDetector(
                   onTap: () async {
-                    final image = await ImagePicker()
+                    final images = await ImagePicker()
                         .pickImage(source: ImageSource.gallery);
-                    if (image == null) {
+                    if (images == null) {
                       return;
                     } else {
-                      final imageTemporary = File(image.path).readAsBytesSync();
+                      final imageTemporary =
+                          File(images.path).readAsBytesSync();
 
-                      setState(() {
-                        widget._image = base64Encode(imageTemporary);
-                      });
+                      image.value = base64Encode(imageTemporary);
                     }
                   },
-                  child: CircleAvatar(
-                    backgroundImage: MemoryImage(
-                        const Base64Decoder().convert(widget._image)),
-                    radius: 50,
-                  ),
+                  child: Obx(() => CircleAvatar(
+                        backgroundImage: MemoryImage(
+                            const Base64Decoder().convert(image.value)),
+                        radius: 50,
+                      )),
                 ),
               ),
             ),
@@ -150,7 +142,7 @@ class _EditPageState extends State<EditPage> {
           padding: const EdgeInsets.all(8.0),
           child: Buttons(
               function: () {
-                checkValidation(widget.data);
+                checkValidation(data);
                 formkey.currentState?.validate();
               },
               label: 'UPDATE'),
@@ -165,11 +157,7 @@ class _EditPageState extends State<EditPage> {
     final domain = _domain.text.trim();
     final phone = _phone.text.trim();
     final student = StudentModel(
-        age: age,
-        name: name,
-        domain: domain,
-        phone: phone,
-        image: widget._image);
+        age: age, name: name, domain: domain, phone: phone, image: image.value);
 
     if (name.isEmpty || age.isEmpty || domain.isEmpty || phone.isEmpty) {
       return;

@@ -10,13 +10,9 @@ import 'dart:io';
 import 'widgets/add_image.dart';
 import 'widgets/textfields.dart';
 
-class AddDetails extends StatefulWidget {
-  const AddDetails({super.key});
-  @override
-  State<AddDetails> createState() => _AddDetailsState();
-}
+class AddDetails extends StatelessWidget {
+   AddDetails({super.key});
 
-class _AddDetailsState extends State<AddDetails> {
   final formkey = GlobalKey<FormState>();
 
   final _username = TextEditingController();
@@ -29,7 +25,7 @@ class _AddDetailsState extends State<AddDetails> {
 
   final ImagePicker picker = ImagePicker();
 
-  String _image = '';
+  RxString _image = ''.obs;
   final StudentController _studentsController = Get.put(StudentController());
 
   @override
@@ -85,15 +81,14 @@ class _AddDetailsState extends State<AddDetails> {
                           final imageTemporary =
                               File(image.path).readAsBytesSync();
 
-                          setState(
-                            () {
-                              _image = base64Encode(imageTemporary);
-                            },
-                          );
+                      
+                              _image.value= base64Encode(imageTemporary);
+                            
+                          
                         }
                       },
                       child: AddImage(
-                        image: _image,
+                        image: _image ,
                       ),
                     ),
                   ],
@@ -172,7 +167,7 @@ class _AddDetailsState extends State<AddDetails> {
     final domain = _domain.text.trim();
     final phone = _phone.text.trim();
     final student = StudentModel(
-        age: age, name: name, domain: domain, phone: phone, image: _image);
+        age: age, name: name, domain: domain, phone: phone, image: _image.value);
     if (name.isEmpty ||
         age.isEmpty ||
         domain.isEmpty ||

@@ -8,9 +8,12 @@ import '../view/view_screen.dart';
 class StudentList extends StatelessWidget {
   StudentList({Key? key}) : super(key: key);
   final StudentController _controller = Get.put(StudentController());
+  
   @override
   Widget build(BuildContext context) {
+
     return GetBuilder<StudentController>(builder: (studentController) {
+      
       return ListView.separated(
           itemBuilder: (context, index) {
             final data = _controller.studentList[index];

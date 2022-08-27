@@ -5,7 +5,7 @@ import 'package:get/route_manager.dart';
 import 'package:student_details/screens/addDetail/add_detail.dart';
 import '../../constants/Button/material_button.dart';
 import '../../constants/styles.dart';
-import '../../db/functions/db_functions.dart';
+
 import '../search/search.dart';
 import 'student_list.dart';
 
@@ -14,7 +14,7 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    getAllStudents();
+   
     return Scaffold(
       body: Container(
         decoration: baground,
@@ -38,7 +38,7 @@ class HomeScreen extends StatelessWidget {
           bottomNavigationBar: Buttons(
             label: 'ADD NEW',
             function: () {
-              Get.to(const AddDetails());
+              Get.to( AddDetails());
             },
           ),
         ),
