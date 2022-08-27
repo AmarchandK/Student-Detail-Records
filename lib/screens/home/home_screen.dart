@@ -1,6 +1,7 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:flutter/material.dart';
+import 'package:get/route_manager.dart';
 import 'package:student_details/screens/addDetail/add_detail.dart';
 import '../../constants/Button/material_button.dart';
 import '../../constants/styles.dart';
@@ -19,7 +20,6 @@ class HomeScreen extends StatelessWidget {
         decoration: baground,
         child: Scaffold(
           backgroundColor: Colors.transparent,
-       
           appBar: AppBar(
             title: titile(tittle: 'STUDENTS'),
             actions: [
@@ -34,16 +34,11 @@ class HomeScreen extends StatelessWidget {
               )
             ],
           ),
-          body: const StudentList(),
-          bottomNavigationBar:  Buttons(
+          body: StudentList(),
+          bottomNavigationBar: Buttons(
             label: 'ADD NEW',
             function: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const AddDetails(),
-                ),
-              );
+              Get.to(const AddDetails());
             },
           ),
         ),

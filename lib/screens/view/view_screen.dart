@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:get/route_manager.dart';
 import '../../constants/styles.dart';
 import '../../db/models/data_model.dart';
 import '../edit/edit_screen.dart';
@@ -47,17 +48,7 @@ class ViewScreen extends StatelessWidget {
         floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
         floatingActionButton: FloatingActionButton(
           backgroundColor: themeColor,
-          onPressed: () {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => EditPage(
-                  data: data,
-                  index: index,
-                ),
-              ),
-            );
-          },
+          onPressed: () =>Get.to( EditPage(data: data, index: index)),
           child: const Icon(Icons.edit),
         ),
       ),

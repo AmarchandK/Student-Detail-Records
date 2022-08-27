@@ -1,9 +1,9 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:student_details/controllers/student_controller.dart';
 import '../../constants/Button/material_button.dart';
-import '../../constants/styles.dart';
-import '../../db/functions/db_functions.dart';
 import '../../db/models/data_model.dart';
 import '../home/home_screen.dart';
 import 'dart:io';
@@ -30,6 +30,8 @@ class _AddDetailsState extends State<AddDetails> {
   final ImagePicker picker = ImagePicker();
 
   String _image = '';
+  final StudentController _studentsController = Get.put(StudentController());
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,36 +42,15 @@ class _AddDetailsState extends State<AddDetails> {
             children: [
               Container(
                 width: double.infinity,
-                height: 350,
+                height: MediaQuery.of(context).size.height / 2.5,
                 decoration: const BoxDecoration(
-                    image: DecorationImage(
-                        image: AssetImage('assets/background.png'),
-                        fit: BoxFit.fill)),
-              ),
-              Positioned(
-                left: 30,
-                width: 80,
-                height: 200,
-                child: Container(
-                  decoration: const BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage('assets/light-1.png'),
-                    ),
-                  ),
+                  image: DecorationImage(
+                      image: AssetImage('assets/background.png'),
+                      fit: BoxFit.fill),
                 ),
               ),
-              Positioned(
-                left: 130,
-                width: 80,
-                height: 150,
-                child: Container(
-                  decoration: const BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage('assets/light-2.png'),
-                    ),
-                  ),
-                ),
-              ),
+              stacks(l: 30, w: 80, h: 200, img: 'assets/light-1.png'),
+              stacks(l: 130, w: 80, h: 150, img: 'assets/light-2.png'),
               Positioned(
                 right: 30,
                 width: 80,
@@ -119,10 +100,7 @@ class _AddDetailsState extends State<AddDetails> {
                 ),
               ),
               IconButton(
-                onPressed: () => Navigator.of(context).pushAndRemoveUntil(
-                    MaterialPageRoute(
-                        builder: (BuildContext context) => const HomeScreen()),
-                    (route) => false),
+                onPressed: () => Get.to(const HomeScreen()),
                 icon: const Icon(
                   Icons.arrow_back,
                   color: Colors.white,
@@ -159,15 +137,31 @@ class _AddDetailsState extends State<AddDetails> {
           ),
         ],
       ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(18.0),
-        child: Buttons(
-            function: () {
-              if (formkey.currentState!.validate()) {
-                checkValidation();
-              }
-            },
-            label: 'Submit'),
+      bottomNavigationBar: Buttons(
+          function: () {
+            if (formkey.currentState!.validate()) {
+              checkValidation();
+            }
+          },
+          label: 'Submit'),
+    );
+  }
+
+  Positioned stacks(
+      {required double l,
+      required double w,
+      required double h,
+      required String img}) {
+    return Positioned(
+      left: l,
+      width: w,
+      height: h,
+      child: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage(img),
+          ),
+        ),
       ),
     );
   }
@@ -184,21 +178,17 @@ class _AddDetailsState extends State<AddDetails> {
         domain.isEmpty ||
         phone.isEmpty ||
         _image.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          behavior: SnackBarBehavior.floating,
-          backgroundColor: themeColor,
-          content: Text('All Field Required'),
-        ),
-      );
+      Get.snackbar("", "Showed");
+      // ScaffoldMessenger.of(context).showSnackBar(
+      //   const SnackBar(
+      //     behavior: SnackBarBehavior.floating,
+      //     backgroundColor: themeColor,
+      //     content: Text('All Field Required'),
+      //   ),
+      // );
     } else {
-      addStudent(student);
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: ((context) => const HomeScreen()),
-        ),
-      );
+      _studentsController.addStudent(student);
+      Get.to(const HomeScreen());
     }
   }
 }

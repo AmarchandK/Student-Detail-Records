@@ -1,8 +1,10 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import '../../constants/Button/material_button.dart';
 import '../../constants/styles.dart';
+import '../../controllers/student_controller.dart';
 import '../../db/functions/db_functions.dart';
 import '../../db/models/data_model.dart';
 import '../home/home_screen.dart';
@@ -19,6 +21,8 @@ class EditPage extends StatefulWidget {
   @override
   State<EditPage> createState() => _EditPageState();
 }
+
+final StudentController _controller = Get.put(StudentController());
 
 class _EditPageState extends State<EditPage> {
   final formkey = GlobalKey<FormState>();
@@ -146,7 +150,7 @@ class _EditPageState extends State<EditPage> {
           padding: const EdgeInsets.all(8.0),
           child: Buttons(
               function: () {
-                checkValidation();
+                checkValidation(widget.data);
                 formkey.currentState?.validate();
               },
               label: 'UPDATE'),
@@ -155,7 +159,7 @@ class _EditPageState extends State<EditPage> {
     );
   }
 
-  checkValidation() async {
+  checkValidation(StudentModel data) async {
     final name = _name.text.trim();
     final age = _age.text.trim();
     final domain = _domain.text.trim();
@@ -170,10 +174,8 @@ class _EditPageState extends State<EditPage> {
     if (name.isEmpty || age.isEmpty || domain.isEmpty || phone.isEmpty) {
       return;
     } else {
-      updateDetails(data: student, index: widget.index);
-      Navigator.of(context)
-          .push(MaterialPageRoute(builder: (context) => const HomeScreen()));
-      getAllStudents();
+      _controller.updateStudent(data.key, student);
+      Get.to(const HomeScreen());
     }
   }
 }
