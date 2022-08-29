@@ -4,7 +4,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:student_details/constants/styles.dart';
 import 'package:student_details/controllers/student_controller.dart';
 import '../../constants/Button/material_button.dart';
 import '../../db/models/data_model.dart';
