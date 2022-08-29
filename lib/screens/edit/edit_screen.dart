@@ -60,11 +60,13 @@ class EditPage extends StatelessWidget {
                       image.value = base64Encode(imageTemporary);
                     }
                   },
-                  child: Obx(() => CircleAvatar(
-                        backgroundImage: MemoryImage(
-                            const Base64Decoder().convert(image.value)),
-                        radius: 50,
-                      )),
+                  child: Obx(
+                    () => CircleAvatar(
+                      backgroundImage: MemoryImage(
+                          const Base64Decoder().convert(image.value)),
+                      radius: 50,
+                    ),
+                  ),
                 ),
               ),
             ),
@@ -163,7 +165,9 @@ class EditPage extends StatelessWidget {
       return;
     } else {
       _controller.updateStudent(data.key, student);
-      Get.to(const HomeScreen());
+      Get.offAll(
+        const HomeScreen(),
+      );
     }
   }
 }

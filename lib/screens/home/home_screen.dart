@@ -5,7 +5,6 @@ import 'package:get/route_manager.dart';
 import 'package:student_details/screens/addDetail/add_detail.dart';
 import '../../constants/Button/material_button.dart';
 import '../../constants/styles.dart';
-
 import '../search/search.dart';
 import 'student_list.dart';
 

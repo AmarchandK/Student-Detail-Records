@@ -4,11 +4,13 @@ class TextFields extends StatelessWidget {
   final String name;
   final TextEditingController controler;
   final TextInputType keybord;
+  final String? Function(String?)? validator;
   const TextFields({
     Key? key,
     required this.name,
     required this.controler,
     required this.keybord,
+   required this.validator,
   }) : super(key: key);
 
   @override
@@ -18,22 +20,17 @@ class TextFields extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(8),
         decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(15),
-            boxShadow: const [
-              BoxShadow(
-                  color: Color.fromARGB(141, 100, 118, 223),
-                  blurRadius: 20,
-                  offset: Offset(0, 10))
-            ]),
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(15),
+          boxShadow: const [
+            BoxShadow(
+                color: Color.fromARGB(141, 100, 118, 223),
+                blurRadius: 20,
+                offset: Offset(0, 10))
+          ],
+        ),
         child: TextFormField(
-          validator: (value) {
-            if (value == null || value.isEmpty) {
-              return 'Invalid';
-            } else {
-              return null;
-            }
-          },
+          validator: validator,
           controller: controler,
           keyboardType: keybord,
           decoration: InputDecoration(

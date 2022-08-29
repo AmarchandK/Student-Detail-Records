@@ -25,8 +25,9 @@ class ViewScreen extends StatelessWidget {
               ),
               Center(
                 child: CircleAvatar(
-                  backgroundImage:
-                      MemoryImage(const Base64Decoder().convert(data.image)),
+                  backgroundImage: MemoryImage(
+                    const Base64Decoder().convert(data.image),
+                  ),
                   radius: 120,
                 ),
               ),
@@ -48,7 +49,9 @@ class ViewScreen extends StatelessWidget {
         floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
         floatingActionButton: FloatingActionButton(
           backgroundColor: themeColor,
-          onPressed: () =>Get.to( EditPage(data: data, index: index)),
+          onPressed: () => Get.to(
+            EditPage(data: data, index: index),
+          ),
           child: const Icon(Icons.edit),
         ),
       ),
@@ -65,22 +68,28 @@ class CardsWidget extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(18.0),
       child: Container(
-          width: double.infinity,
-          height: 60,
-          padding: const EdgeInsets.all(8),
-          decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(15),
-              boxShadow: const [
-                BoxShadow(
-                    color: themeColor, blurRadius: 20, offset: Offset(0, 10))
-              ]),
-          child: Center(
-              child: Text(
+        width: double.infinity,
+        height: 60,
+        padding: const EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(15),
+          boxShadow: const [
+            BoxShadow(
+              color: themeColor,
+              blurRadius: 20,
+              offset: Offset(0, 10),
+            )
+          ],
+        ),
+        child: Center(
+          child: Text(
             item,
             style: const TextStyle(
                 fontSize: 30, fontWeight: FontWeight.bold, color: themeColor),
-          ))),
+          ),
+        ),
+      ),
     );
   }
 }

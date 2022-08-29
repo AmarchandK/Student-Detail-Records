@@ -1,7 +1,10 @@
+// ignore_for_file: must_be_immutable
+
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:student_details/constants/styles.dart';
 import 'package:student_details/controllers/student_controller.dart';
 import '../../constants/Button/material_button.dart';
 import '../../db/models/data_model.dart';
@@ -11,7 +14,7 @@ import 'widgets/add_image.dart';
 import 'widgets/textfields.dart';
 
 class AddDetails extends StatelessWidget {
-   AddDetails({super.key});
+  AddDetails({super.key});
 
   final formkey = GlobalKey<FormState>();
 
@@ -25,7 +28,7 @@ class AddDetails extends StatelessWidget {
 
   final ImagePicker picker = ImagePicker();
 
-  RxString _image = ''.obs;
+  final RxString _image = ''.obs;
   final StudentController _studentsController = Get.put(StudentController());
 
   @override
@@ -81,14 +84,11 @@ class AddDetails extends StatelessWidget {
                           final imageTemporary =
                               File(image.path).readAsBytesSync();
 
-                      
-                              _image.value= base64Encode(imageTemporary);
-                            
-                          
+                          _image.value = base64Encode(imageTemporary);
                         }
                       },
                       child: AddImage(
-                        image: _image ,
+                        image: _image,
                       ),
                     ),
                   ],
@@ -108,25 +108,51 @@ class AddDetails extends StatelessWidget {
             child: Column(
               children: [
                 TextFields(
-                  name: 'Name',
-                  controler: _username,
-                  keybord: TextInputType.name,
-                ),
+                    name: 'Name',
+                    controler: _username,
+                    keybord: TextInputType.name,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Enter your Name';
+                      } else {
+                        return null;
+                      }
+                    }),
                 TextFields(
-                  name: 'Mobile',
-                  controler: _phone,
-                  keybord: TextInputType.number,
-                ),
+                    name: 'Mobile',
+                    controler: _phone,
+                    keybord: TextInputType.number,
+                    validator: (value) {
+                      if (value == null ||
+                          value.isEmpty ||
+                          value.length != 10) {
+                        return 'Mob no must 10 digits';
+                      } else {
+                        return null;
+                      }
+                    }),
                 TextFields(
-                  name: 'Domain',
-                  controler: _domain,
-                  keybord: TextInputType.name,
-                ),
+                    name: 'Domain',
+                    controler: _domain,
+                    keybord: TextInputType.name,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Enter Domain Name';
+                      } else {
+                        return null;
+                      }
+                    }),
                 TextFields(
-                  name: 'Age',
-                  controler: _age,
-                  keybord: TextInputType.number,
-                ),
+                    name: 'Age',
+                    controler: _age,
+                    keybord: TextInputType.number,
+                    validator: (value) {
+                      if (value == null || value.isEmpty || value.length > 2) {
+                        return 'Invalid Age';
+                      } else {
+                        return null;
+                      }
+                    }),
               ],
             ),
           ),
@@ -167,23 +193,26 @@ class AddDetails extends StatelessWidget {
     final domain = _domain.text.trim();
     final phone = _phone.text.trim();
     final student = StudentModel(
-        age: age, name: name, domain: domain, phone: phone, image: _image.value);
+        age: age,
+        name: name,
+        domain: domain,
+        phone: phone,
+        image: _image.value);
     if (name.isEmpty ||
         age.isEmpty ||
         domain.isEmpty ||
         phone.isEmpty ||
         _image.isEmpty) {
-      Get.snackbar("", "Showed");
-      // ScaffoldMessenger.of(context).showSnackBar(
-      //   const SnackBar(
-      //     behavior: SnackBarBehavior.floating,
-      //     backgroundColor: themeColor,
-      //     content: Text('All Field Required'),
-      //   ),
-      // );
+      Get.snackbar(
+        "Profile Photo required",
+        "",
+        dismissDirection: DismissDirection.horizontal,
+        snackPosition: SnackPosition.BOTTOM,
+        colorText: Colors.red,
+      );
     } else {
       _studentsController.addStudent(student);
-      Get.to(const HomeScreen());
+      Get.off(const HomeScreen());
     }
   }
 }
